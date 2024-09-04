@@ -24,7 +24,11 @@ repositories {
 }
 
 dependencies {
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // mybatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
