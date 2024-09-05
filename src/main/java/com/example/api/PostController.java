@@ -56,11 +56,8 @@ public class PostController {
     @GetMapping("/post/{id}")
     public String viewPost(@PathVariable("id") Long id, Model model) {
         Post post = postMapper.findById(id);
-        String[] lines = post.getContent().split("\n", 2);
-        String title = lines[0];
-        String content = lines.length > 1 ? lines[1] : "";
+        String content = post.getContent();
         String htmlContent = renderer.render(parser.parse(content));
-        post.setTitle(title);
         post.setContent(htmlContent);
         model.addAttribute("post", post);
         return "post";
