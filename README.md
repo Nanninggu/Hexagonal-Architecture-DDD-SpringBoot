@@ -1,3 +1,79 @@
+### Postgresql 세팅 방법
+jdbc URL : jdbc:postgresql://localhost:5433/PracticeDB
+
+### 테이블 생성 쿼리
+```sql
+CREATE TABLE IF NOT EXISTS public.chat_message
+(
+    id integer NOT NULL DEFAULT nextval('chat_message_id_seq'::regclass),
+    message text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT chat_message_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.chat_message
+    OWNER to postgres;
+```
+```sql
+CREATE TABLE IF NOT EXISTS public.entities
+(
+    id integer NOT NULL DEFAULT nextval('entities_id_seq'::regclass),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT entities_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.entities
+    OWNER to postgres;
+```
+```sql
+CREATE TABLE IF NOT EXISTS public.posts
+(
+    id integer NOT NULL DEFAULT nextval('posts_id_seq'::regclass),
+    title character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    author character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    date date NOT NULL,
+    views integer NOT NULL,
+    content text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT posts_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.posts
+    OWNER to postgres;
+```
+```sql
+CREATE TABLE IF NOT EXISTS public.received_message
+(
+    id integer NOT NULL DEFAULT nextval('received_message_id_seq'::regclass),
+    message text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT received_message_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.received_message
+    OWNER to postgres;
+```
+```sql
+CREATE TABLE IF NOT EXISTS public.tourist_spot
+(
+    id integer NOT NULL DEFAULT nextval('tourist_spot_id_seq'::regclass),
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    description text COLLATE pg_catalog."default",
+    city character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tourist_spot_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.tourist_spot
+    OWNER to postgres;
+```
+
 ### 프로젝트 구조 설명
 
 프로젝트는 헥사고날 아키텍처와 도메인 주도 설계(DDD)를 기반으로 구성되어 있다. 각 폴더는 특정한 역할을 담당하며, 다음과 같은 구조를 가진다:
@@ -65,3 +141,4 @@ project-root/
     - 상위 계층이 하위 계층에 의존하지 않고, 인터페이스를 통해 의존성을 주입받아 DIP를 준수한다. 예를 들어, `application` 계층이 `domain` 계층의 인터페이스를 통해 의존성을 주입받는다.
 
 이러한 장점들은 헥사고날 아키텍처와 도메인 주도 설계(DDD)를 기반으로 한 구조에서 얻을 수 있는 대표적인 이점들이다.
+
