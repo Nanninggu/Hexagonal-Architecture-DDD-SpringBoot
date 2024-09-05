@@ -10,4 +10,20 @@
     <insert id="insertMessage">
         INSERT INTO received_message (id, message) VALUES (#{id}, #{message})
     </insert>
+
+    <select id="findAll" resultType="com.example.domain.ReceivedMessage">
+        SELECT * FROM received_message
+    </select>
+
+    <select id="findLatestMessages" resultType="com.example.domain.ReceivedMessage">
+        SELECT * FROM received_message ORDER BY id DESC LIMIT 10
+    </select>
+
+    <select id="findReceivedMessages" resultType="com.example.domain.ReceivedMessage">
+        SELECT * FROM received_message LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countTotalMessages" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM received_message
+    </select>
 </mapper>

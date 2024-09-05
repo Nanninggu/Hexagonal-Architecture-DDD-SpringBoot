@@ -11,17 +11,13 @@ public interface ReceivedMessageMapper {
 
     Integer getLastId();
 
-    void insertMessage(int id, String message);
+    void insertMessage(@Param("id") int id, @Param("message") String message);
 
-    @Select("SELECT * FROM received_message")
     List<ReceivedMessage> findAll();
 
-    @Select("SELECT * FROM received_message ORDER BY id DESC LIMIT 10")
     List<ReceivedMessage> findLatestMessages();
 
-    @Select("SELECT * FROM received_messages LIMIT #{size} OFFSET #{offset}")
     List<ReceivedMessage> findReceivedMessages(@Param("offset") int offset, @Param("size") int size);
 
-    @Select("SELECT COUNT(*) FROM received_messages")
     int countTotalMessages();
 }
