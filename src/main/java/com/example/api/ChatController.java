@@ -29,7 +29,7 @@ public class ChatController {
         List<ReceivedMessage> receivedMessages = receivedMessageService.getLatestMessages();
         model.addAttribute("chatMessages", chatMessages);
         model.addAttribute("receivedMessages", receivedMessages);
-        return "combined";
+        return "combined"; // Ensure this matches the template name
     }
 
     @PostMapping("/chat")

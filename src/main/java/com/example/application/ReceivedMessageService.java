@@ -21,4 +21,12 @@ public class ReceivedMessageService {
     public List<ReceivedMessage> getLatestMessages() {
         return receivedMessageMapper.findLatestMessages();
     }
+
+    public List<ReceivedMessage> getReceivedMessages(int offset, int size) {
+        return receivedMessageMapper.findReceivedMessages(offset, size);
+    }
+
+    public int getTotalMessages() {
+        return receivedMessageMapper.countTotalMessages();
+    }
 }

@@ -17,6 +17,14 @@ public class ChatService {
         this.touristSpotService = touristSpotService;
     }
 
+    public List<ChatMessage> getChatMessages(int offset, int limit) {
+        return chatMapper.findChatMessages(offset, limit);
+    }
+
+    public int getTotalMessages() {
+        return chatMapper.countChatMessages();
+    }
+
     public List<ChatMessage> getLatestMessages() {
         return chatMapper.findLatestMessages();
     }

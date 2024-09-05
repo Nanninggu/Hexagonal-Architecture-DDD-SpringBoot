@@ -6,20 +6,21 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Chat and Received Messages</h1>
+    <h1 class="text-center mb-4">Memo and TCP/IP Connection Messages</h1>
     <div class="row">
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h2>Chat</h2>
+                    <h2>Memo (간단한 메모)</h2>
                     <ul class="list-group">
-                        <li class="list-group-item" th:each="message : ${chatMessages}" th:text="${message.message}"></li>
+                        <li class="list-group-item" th:each="message : ${chatMessages}"
+                            th:text="${message.message}"></li>
                     </ul>
                     <form action="/chat" method="post" class="mt-4">
                         <div class="form-group">
-                            <input type="text" name="message" class="form-control" placeholder="Enter your message">
+                            <input type="text" name="message" class="form-control" placeholder="여기에 메세지를 입력해 주세요.">
                         </div>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">전송</button>
                     </form>
                 </div>
             </div>
@@ -27,22 +28,22 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-body">
-                    <h2>Received Messages</h2>
+                    <h2>TCP/IP Messages</h2>
                     <div class="form-group">
-                        <label for="tcpActions">TCP Actions</label>
+                        <label for="tcpActions">TCP 연결 구성</label>
                         <select id="tcpActions" class="form-control d-inline-block w-auto">
-                            <option value="">Select an action</option>
+                            <option value="">커넥션 연결 선택</option>
                             <option value="start">TCP 연결</option>
                             <option value="stop">TCP 연결해제</option>
                         </select>
-                        <button class="btn btn-primary" onclick="executeTcpAction()">Execute</button>
+                        <button class="btn btn-primary" onclick="executeTcpAction()">연결 실행</button>
                     </div>
                     <div id="receivedMessagesContainer">
                         <table class="table table-striped">
                             <thead class="thead-dark">
                             <tr>
-                                <th>ID</th>
-                                <th>Message</th>
+                                <th>TCP ID</th>
+                                <th>전송 Message</th>
                             </tr>
                             </thead>
                             <tbody id="receivedMessagesTableBody">
