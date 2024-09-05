@@ -1,14 +1,18 @@
 package com.example.domain;
 
-public class ReceivedMessage {
-    private int id;
+public class ChatMessage {
+    private Long id;
     private String message;
 
-    public int getId() {
+    public ChatMessage(String message) {
+        this.message = message;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

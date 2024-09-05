@@ -34,7 +34,7 @@ public class TcpClient {
             while (running) {
                 try {
                     sendMessage("Hello, Server!");
-                    Thread.sleep(1000); // Send message every second
+                    Thread.sleep(2000); // Send message every second
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     logger.severe("Message sending thread interrupted: " + e.getMessage());

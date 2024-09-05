@@ -1,14 +1,9 @@
 package com.example.domain;
 
-public class Entity {
-
+public class TouristSpot {
     private Long id;
     private String name;
-
-    public Entity(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private String description;
 
     public Long getId() {
         return id;
@@ -24,5 +19,13 @@ public class Entity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

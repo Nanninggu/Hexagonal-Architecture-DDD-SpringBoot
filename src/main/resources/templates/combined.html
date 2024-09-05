@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chat and Received Messages</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Chat and Received Messages</h1>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Chat</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item" th:each="message : ${chatMessages}" th:text="${message.message}"></li>
+                    </ul>
+                    <form action="/chat" method="post" class="mt-4">
+                        <div class="form-group">
+                            <input type="text" name="message" class="form-control" placeholder="Enter your message">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2>Received Messages</h2>
+                    <div class="form-group">
+                        <label for="tcpActions">TCP Actions</label>
+                        <select id="tcpActions" class="form-control d-inline-block w-auto">
+                            <option value="">Select an action</option>
+                            <option value="start">TCP 연결</option>
+                            <option value="stop">TCP 연결해제</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="executeTcpAction()">Execute</button>
+                    </div>
+                    <div id="receivedMessagesContainer">
+                        <table class="table table-striped">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Message</th>
+                            </tr>
+                            </thead>
+                            <tbody id="receivedMessagesTableBody">
+                            <tr th:each="message : ${receivedMessages}">
+                                <td th:text="${message.id}"></td>
+                                <td th:text="${message.message}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function executeTcpAction() {
+        const action = document.getElementById('tcpActions').value;
+        if (action === 'start') {
+            fetch('/api/entities/tcp-client/start?serverAddress=127.0.0.1', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => alert('TCP 연결 성공'))
+                .catch(error => alert('TCP 연결 실패: ' + error));
+        } else if (action === 'stop') {
+            fetch('/api/entities/tcp-client/stop', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => alert('TCP 연결해제 성공'))
+                .catch(error => alert('TCP 연결해제 실패: ' + error));
+        }
+    }
+
+    function refreshReceivedMessages() {
+        fetch('/api/entities/received-messages')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('receivedMessagesTableBody');
+                tableBody.innerHTML = '';
+                data.forEach(message => {
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    idCell.textContent = message.id;
+                    const messageCell = document.createElement('td');
+                    messageCell.textContent = message.message;
+                    row.appendChild(idCell);
+                    row.appendChild(messageCell);
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching received messages:', error));
+    }
+
+    setInterval(refreshReceivedMessages, 1000);
+</script>
+</body>
+</html>

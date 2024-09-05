@@ -2,13 +2,13 @@ package com.example.api;
 
 import com.example.application.ReceivedMessageService;
 import com.example.domain.ReceivedMessage;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class ReceivedMessageController {
     private final ReceivedMessageService receivedMessageService;
 
@@ -21,5 +21,10 @@ public class ReceivedMessageController {
         List<ReceivedMessage> messages = receivedMessageService.getLatestMessages();
         model.addAttribute("messages", messages);
         return "messages";
+    }
+
+    @GetMapping("/api/entities/received-messages")
+    public List<ReceivedMessage> getLatestMessages() {
+        return receivedMessageService.getLatestMessages();
     }
 }
