@@ -2,8 +2,6 @@ package com.example.application;
 
 import com.example.domain.ReceivedMessage;
 import com.example.infrastructure.tcp_ip.ReceivedMessageMapper;
-import lombok.Getter;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
