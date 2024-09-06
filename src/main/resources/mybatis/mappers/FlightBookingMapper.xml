@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--<mapper namespace="com.example.DesignPattern.saga_pattern.BookingSystem.mapper.FlightBookingMapper">-->
+<!--    <insert id="insertFlightBooking" parameterType="com.example.DesignPattern.saga_pattern.BookingSystem.dto.FlightBooking">-->
+<!--        INSERT INTO flight_booking (user_id, flight_id, seat_class, status)-->
+<!--        VALUES (#{userId}, #{flightId}, #{seatClass}, #{status})-->
+<!--    </insert>-->
+<!--</mapper>-->
+
+<mapper namespace="com.example.DesignPattern.saga_pattern.BookingSystem.mapper.FlightBookingMapper">
+<insert id="insertFlightBooking" parameterType="com.example.DesignPattern.saga_pattern.BookingSystem.dto.FlightBooking">
+    INSERT INTO flight_booking (user_id, flight_id, seat_class, seat_number, status, payment_status)
+    VALUES (#{userId}, #{flightId}, #{seatClass}, #{seatNumber}, #{status}, #{paymentStatus})
+</insert>
+</mapper>

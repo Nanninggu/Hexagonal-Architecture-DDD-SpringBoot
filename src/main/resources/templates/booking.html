@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet">
+    <style>
+        .step { display: none; }
+        .step.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <button class="btn btn-primary mb-3" onclick="goToStep1()">예약 화면으로 이동</button>
+
+    <div id="step1" class="step active">
+        <h2>Step 1: Enter User ID and Flight ID</h2>
+        <div class="form-group">
+            <label for="userId">User ID:</label>
+            <input type="text" class="form-control" id="userId">
+            <div class="invalid-feedback" id="userIdError">User ID must be exactly 8 characters long.</div>
+        </div>
+        <div class="form-group">
+            <label for="flightId">Flight ID:</label>
+            <input type="text" class="form-control" id="flightId">
+            <div class="invalid-feedback" id="flightIdError">Flight ID must be in the format 123456-123456 and not contain Korean characters.</div>
+        </div>
+        <button class="btn btn-primary" onclick="nextStep(2)">Next</button>
+    </div>
+
+    <div id="step2" class="step">
+        <h2>Step 2: Select Seat Class and Seat</h2>
+        <div class="form-group">
+            <label for="seatClass">Seat Class:</label>
+            <select class="form-control" id="seatClass">
+                <option value="Economy">Economy</option>
+                <option value="Business">Business</option>
+                <option value="First">First</option>
+            </select>
+        </div>
+        <div id="calendar"></div>
+        <input type="hidden" id="seatNumber">
+        <button class="btn btn-primary" onclick="nextStep(3)">Next</button>
+    </div>
+
+    <div id="step3" class="step">
+        <h2>Step 3: Enter Payment Information</h2>
+        <div class="form-group">
+            <label for="paymentDetails">Payment Details:</label>
+            <input type="text" class="form-control" id="paymentDetails">
+        </div>
+        <button class="btn btn-primary" onclick="completeBooking()">Complete</button>
+    </div>
+
+    <div id="step4" class="step">
+        <h2>Step 4: Booking Status</h2>
+        <p>User ID: <span id="displayUserId"></span></p>
+        <p>Flight ID: <span id="displayFlightId"></span></p>
+        <p>Seat Class: <span id="displaySeatClass"></span></p>
+        <p>Seat Number: <span id="displaySeatNumber"></span></p>
+        <p>Status: <span id="displayStatus"></span></p>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+<script>
+    function goToStep1() {
+        document.querySelectorAll('.step').forEach(function (el) {
+            el.classList.remove('active');
+        });
+        document.getElementById('step1').classList.add('active');
+
+        // Clear User ID and Flight ID fields
+        document.getElementById('userId').value = '';
+        document.getElementById('flightId').value = '';
+    }
+
+    function nextStep(step) {
+        const userId = document.getElementById('userId').value;
+        const flightId = document.getElementById('flightId').value;
+
+        const userIdError = document.getElementById('userIdError');
+        const flightIdError = document.getElementById('flightIdError');
+
+        let isValid = true;
+
+        if (userId.length !== 8) {
+            userIdError.style.display = 'block';
+            isValid = false;
+        } else {
+            userIdError.style.display = 'none';
+        }
+
+        const flightIdPattern = /^\d{6}-\d{6}$/;
+        const koreanPattern = /[ㄱ-ㅎㅏ-ㅣ가-힣]/;
+
+        if (!flightIdPattern.test(flightId) || koreanPattern.test(flightId)) {
+            flightIdError.style.display = 'block';
+            isValid = false;
+        } else {
+            flightIdError.style.display = 'none';
+        }
+
+        if (isValid) {
+            document.querySelectorAll('.step').forEach(function (el) {
+                el.classList.remove('active');
+            });
+            document.getElementById('step' + step).classList.add('active');
+        }
+    }
+
+    function completeBooking() {
+        const userId = document.getElementById('userId').value;
+        const flightId = document.getElementById('flightId').value;
+        const seatClass = document.getElementById('seatClass').value;
+        const seatNumber = document.getElementById('seatNumber').value;
+        const paymentDetails = document.getElementById('paymentDetails').value;
+
+        fetch('/flights/book', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userId,
+                flightId: flightId,
+                seatClass: seatClass,
+                seatNumber: seatNumber,
+                paymentDetails: paymentDetails
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('displayUserId').innerText = data.userId;
+            document.getElementById('displayFlightId').innerText = data.flightId;
+            document.getElementById('displaySeatClass').innerText = data.seatClass;
+            document.getElementById('displaySeatNumber').innerText = data.seatNumber;
+            document.getElementById('displayStatus').innerText = data.status;
+            nextStep(4);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end) {
+                const seatNumber = prompt('Enter Seat Number:');
+                if (seatNumber) {
+                    $('#calendar').fullCalendar('removeEvents');
+                    $('#calendar').fullCalendar('renderEvent', {
+                        title: seatNumber,
+                        start: start,
+                        end: end,
+                        allDay: true
+                    });
+                    document.getElementById('seatNumber').value = seatNumber;
+                }
+                $('#calendar').fullCalendar('unselect');
+            }
+        });
+    });
+</script>
+</body>
+</html>

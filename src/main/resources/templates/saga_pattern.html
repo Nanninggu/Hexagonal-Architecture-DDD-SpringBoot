@@ -1,0 +1,124 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Saga Pattern Execution Flow</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            line-height: 1.6;-->
+<!--        }-->
+<!--        .log {-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+<!--        .container {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--        }-->
+<!--        .log-container {-->
+<!--            width: 45%;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Saga Pattern Execution Flow</h1>-->
+<!--<div class="container">-->
+<!--    <div class="log-container">-->
+<!--        <h2>Execute Logs</h2>-->
+<!--        <div id="execute-logs"></div>-->
+<!--    </div>-->
+<!--    <div class="log-container">-->
+<!--        <h2>Rollback Logs</h2>-->
+<!--        <div id="rollback-logs"></div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<button onclick="testRollback()">Test Rollback</button>-->
+
+<!--<script>-->
+<!--    const executeLogsDiv = document.getElementById('execute-logs');-->
+<!--    const rollbackLogsDiv = document.getElementById('rollback-logs');-->
+<!--    const socket = new WebSocket('ws://localhost:8080/logs');-->
+
+<!--    socket.onmessage = function(event) {-->
+<!--        const log = document.createElement('div');-->
+<!--        log.className = 'log';-->
+<!--        log.textContent = event.data;-->
+<!--        if (event.data.includes('rollback')) {-->
+<!--            rollbackLogsDiv.appendChild(log);-->
+<!--        } else {-->
+<!--            executeLogsDiv.appendChild(log);-->
+<!--        }-->
+<!--    };-->
+
+<!--    function testRollback() {-->
+<!--        fetch('/test-rollback', { method: 'POST' });-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saga Pattern Execution Flow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .log {
+            margin-bottom: 10px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .log-container {
+            width: 45%;
+        }
+    </style>
+</head>
+<body>
+<h1>Saga Pattern Execution Flow</h1>
+<div class="container">
+    <div class="log-container">
+        <h2>Execute Logs</h2>
+        <div id="execute-logs"></div>
+    </div>
+    <div class="log-container">
+        <h2>Rollback Logs</h2>
+        <div id="rollback-logs"></div>
+    </div>
+</div>
+<button onclick="testTransaction()">Test Transaction</button>
+<button onclick="testRollback()">Test Rollback</button>
+
+<script>
+    const executeLogsDiv = document.getElementById('execute-logs');
+    const rollbackLogsDiv = document.getElementById('rollback-logs');
+    const socket = new WebSocket('ws://localhost:8080/logs');
+
+    socket.onmessage = function(event) {
+        const log = document.createElement('div');
+        log.className = 'log';
+        log.textContent = event.data;
+        if (event.data.includes('rollback')) {
+            rollbackLogsDiv.appendChild(log);
+        } else {
+            executeLogsDiv.appendChild(log);
+        }
+    };
+
+    function testTransaction() {
+        fetch('/test-transaction', { method: 'POST' });
+    }
+
+    function testRollback() {
+        fetch('/test-rollback', { method: 'POST' });
+    }
+</script>
+</body>
+</html>
