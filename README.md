@@ -73,6 +73,42 @@ TABLESPACE pg_default;
 ALTER TABLE IF EXISTS public.tourist_spot
     OWNER to postgres;
 ```
+```sql
+CREATE TABLE IF NOT EXISTS public.flight_booking
+(
+    id integer NOT NULL DEFAULT nextval('flight_booking_id_seq'::regclass),
+    user_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    flight_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    seat_class character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    seat_number character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    status character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    payment_status character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT flight_booking_pkey PRIMARY KEY (seat_number)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.flight_booking
+    OWNER to postgres;
+```
+
+```sql
+CREATE TABLE IF NOT EXISTS public.flight_booking_request
+(
+    id integer NOT NULL DEFAULT nextval('flight_booking_request_id_seq'::regclass),
+    user_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    flight_id character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    seat_class character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    seat_number character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    payment_details text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT flight_booking_request_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.flight_booking_request
+    OWNER to postgres;
+```
 
 ### 프로젝트 구조 설명
 
